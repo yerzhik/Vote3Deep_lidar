@@ -70,15 +70,15 @@ def read_data ():
 	data, y1, y2 = np.array (data), np.array (y1), np.array (y2)
 	arr = np.arange(len (data))
 	np.random.shuffle(arr)
-	TX = data[arr[0:len (arr)*0.6]]
-	tX = data[arr[len (arr)*0.6:len (arr)*0.895]]
-	vX = data[arr[len (arr)*0.895:]]
-	Ty1 = y1[arr[0:len (arr)*0.6]]
-	ty1 = y1[arr[len (arr)*0.6:len (arr)*0.895]]
-	vy1 = y1[arr[len (arr)*0.895:]]
-	Ty2 = y2[arr[0:len (arr)*0.6]]
-	ty2 = y2[arr[len (arr)*0.6:len (arr)*0.895]]
-	vy2 = y2[arr[len (arr)*0.895:]]
+	TX = data[arr[0:int(len (arr)*0.6)]]
+	tX = data[arr[int(len (arr)*0.6):int(len (arr)*0.895)]]
+	vX = data[arr[int(len (arr)*0.895):]]
+	Ty1 = y1[arr[0:int(len (arr)*0.6)]]
+	ty1 = y1[arr[int(len (arr)*0.6):int(len (arr)*0.895)]]
+	vy1 = y1[arr[int(len (arr)*0.895):]]
+	Ty2 = y2[arr[0:int(len (arr)*0.6)]]
+	ty2 = y2[arr[int(len (arr)*0.6):int(len (arr)*0.895)]]
+	vy2 = y2[arr[int(len (arr)*0.895):]]
 	print 'Cars = ', car, 'Peds = ', ped, 'Cyc = ', cyc
 	return TX, Ty1, Ty2, tX, ty1, ty2, vX, vy1, vy2
 
@@ -122,7 +122,7 @@ def gen_model (input_shape=(6,10,10,10)):
 	model.add(Dense(3))
 	X1 = Dense(3)(X)
 	model.add(Activation('softmax'))
-	X1 = Activation('softmax', name='Class Act')(X1)
+	X1 = Activation('softmax', name='Class_Act')(X1)
 	model.add(Dense(400))
 	X2 = Dense(400)(X)
 	model.add(Activation('relu'))
@@ -131,7 +131,7 @@ def gen_model (input_shape=(6,10,10,10)):
 	X2 = Dense(4)(X2)
 	model.add(Activation('relu'))
 
-	X2 = Activation('relu', name='Box Act')(X2)
+	X2 = Activation('relu', name='Box_Act')(X2)
 	model = Model (inp, [X1, X2])
 	convModel = Model (inp, Z)
 	sgd = SGD(lr=2e-30, decay=1e-4, momentum=0.9, nesterov=True)
@@ -161,8 +161,8 @@ if __name__ == '__main__':
 	print (vX.shape)
 	print (vy1.shape)
 	print (vy2.shape)
-	#model.fit(TX, [Ty1, Ty2], batch_size=16, nb_epoch=1, validation_data=(vX, [vy1, vy2]))
-	#model.save_weights('vote3deep.h5')
+	model.fit(TX, [Ty1, Ty2], batch_size=32, nb_epoch=12, validation_data=(vX, [vy1, vy2]))
+	model.save_weights('vote3deep.h5')
 	model.load_weights('vote3deep.h5')
 	y1, y2 = model.predict(tX, batch_size=32, verbose=0)
 	y = cm.predict (TX[0:3])

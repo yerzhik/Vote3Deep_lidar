@@ -26,6 +26,7 @@ def read_data ():
 		files[i] = files [i].replace ('.csv', '')
 		f = files[i]
 		dt = np.loadtxt (f+'.csv', delimiter=',')
+		#print(dt.shape)
 		x = np.zeros (10*10*10*6)
 		x = x.reshape ((6,10,10,10))
 		for j in dt:
@@ -70,15 +71,17 @@ def read_data ():
 	data, y1, y2 = np.array (data), np.array (y1), np.array (y2)
 	arr = np.arange(len (data))
 	np.random.shuffle(arr)
-	TX = data[arr[0:len (arr)*0.6]]
-	tX = data[arr[len (arr)*0.6:len (arr)*0.895]]
-	vX = data[arr[len (arr)*0.895:]]
-	Ty1 = y1[arr[0:len (arr)*0.6]]
-	ty1 = y1[arr[len (arr)*0.6:len (arr)*0.895]]
-	vy1 = y1[arr[len (arr)*0.895:]]
-	Ty2 = y2[arr[0:len (arr)*0.6]]
-	ty2 = y2[arr[len (arr)*0.6:len (arr)*0.895]]
-	vy2 = y2[arr[len (arr)*0.895:]]
+	#print("arr.shape is: " + str(arr.shape))
+	#print("data.shape is :" + str(data.shape))
+	TX = data[arr[0:int(len (arr)*0.6)]]
+	tX = data[arr[int(len (arr)*0.6):int(len (arr)*0.895)]]
+	vX = data[arr[int(len (arr)*0.895):]]
+	Ty1 = y1[arr[0:int(len (arr)*0.6)]]
+	ty1 = y1[arr[int(len (arr)*0.6):int(len (arr)*0.895)]]
+	vy1 = y1[arr[int(len (arr)*0.895):]]
+	Ty2 = y2[arr[0:int(len (arr)*0.6)]]
+	ty2 = y2[arr[int(len (arr)*0.6):int(len (arr)*0.895)]]
+	vy2 = y2[arr[int(len (arr)*0.895):]]
 	print 'Cars = ', car, 'Peds = ', ped, 'Cyc = ', cyc
 	return TX, Ty1, Ty2, tX, ty1, ty2, vX, vy1, vy2
 
@@ -162,9 +165,10 @@ if __name__ == '__main__':
 	model.summary ()
 	print 'Reading data'
 	TX, Ty1, Ty2, tX, ty1, ty2, vX, vy1, vy2 = read_data ()
-	print (TX.shape)
-	print (Ty1.shape)
-	print (Ty2.shape)
+	print ("TX.shape "  + str(TX.shape))
+	print ("Ty1.shape " + str(Ty1.shape))
+	print ("Ty2.shape " + str(Ty2.shape))
+        print(Ty2)
 	print (tX.shape)
 	print (ty1.shape)
 	print (ty2.shape)
@@ -172,8 +176,8 @@ if __name__ == '__main__':
 	print (vy1.shape)
 	print (vy2.shape)
 	#model.fit(TX, [Ty1, Ty2], batch_size=16, nb_epoch=11, validation_data=(vX, [vy1, vy2]))
-	#model.fit(TX, Ty2, batch_size=16, nb_epoch=11, validation_data=(vX, vy2))
-	#model.save_weights('vote3deep.h5')
+	model.fit(TX, Ty2, batch_size=32, nb_epoch=16, validation_data=(vX, vy2))
+	model.save_weights('vote3deep.h5')
 	model.load_weights('vote3deep.h5')
 	#y1, y2 = model.predict(tX, batch_size=32, verbose=0)
 	y2 = model.predict(tX, batch_size=32, verbose=0)
