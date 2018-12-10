@@ -164,6 +164,7 @@ if __name__ == '__main__':
 	model.fit(TX, [Ty1, Ty2], batch_size=32, nb_epoch=12, validation_data=(vX, [vy1, vy2]))
 	model.save_weights('vote3deep.h5')
 	model.load_weights('vote3deep.h5')
+	print("let's predict tX of shape: " + str(tX.shape))	
 	y1, y2 = model.predict(tX, batch_size=32, verbose=0)
 	y = cm.predict (TX[0:3])
 	np.savetxt ('0.txt', y)
