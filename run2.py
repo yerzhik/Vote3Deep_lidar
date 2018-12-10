@@ -12,6 +12,13 @@ from sklearn.metrics import mean_squared_error
 import glob
 from keras import __version__ as keras_version
 
+from keras import backend as K
+from tensorflow.python.client import device_lib
+print(device_lib.list_local_devices())
+
+avail_gpus = K.tensorflow_backend._get_available_gpus()
+print(avail_gpus)
+
 np.random.seed(420)
 
 def read_data ():
@@ -176,13 +183,16 @@ if __name__ == '__main__':
 	print (vy1.shape)
 	print (vy2.shape)
 	#model.fit(TX, [Ty1, Ty2], batch_size=16, nb_epoch=11, validation_data=(vX, [vy1, vy2]))
-	model.fit(TX, Ty2, batch_size=32, nb_epoch=16, validation_data=(vX, vy2))
-	model.save_weights('vote3deep.h5')
+	#model.fit(TX, Ty2, batch_size=32, nb_epoch=512, validation_data=(vX, vy2))
+	#model.save_weights('vote3deep.h5')
 	model.load_weights('vote3deep.h5')
 	#y1, y2 = model.predict(tX, batch_size=32, verbose=0)
+	print("let's predict tX of shape: " + str(tX.shape))
 	y2 = model.predict(tX, batch_size=32, verbose=0)
 	y = cm.predict (TX[0:3])
-	np.savetxt ('0.txt', y)
+	np.savetxt ('tX_to_y2_predict.txt', y2)
+	np.savetxt ('TX0-3_to_y_predict.txt', y)
+	print("shape of TX is: " + str(TX.shape))
 	#er1 = mean_squared_error (ty1, y1)
 	er2 = mean_squared_error (ty2, y2)
 	#print 'Total error 1 = ', er1
