@@ -189,7 +189,7 @@ if __name__ == '__main__':
 	#y1, y2 = model.predict(tX, batch_size=32, verbose=0)
 	print("let's predict tX of shape: " + str(tX.shape))
 	y2 = model.predict(tX, batch_size=32, verbose=0)
-	y = cm.predict (TX[0:3])
+	y = cm.predict (TX)
 	np.savetxt ('tX_to_y2_predict.txt', y2)
 	np.savetxt ('TX0-3_to_y_predict.txt', y)
 	print("shape of TX is: " + str(TX.shape))

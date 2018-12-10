@@ -23,7 +23,8 @@ np.random.seed(420)
 
 def read_data ():
 	data = []
-	files = glob.glob ('/home/yerzhan/temp/recdata_2018-08-22T10-25-53/recdata_20180822_012558_003375/pcl_rs16Rec_20180822_0129/grid_files/*.csv')
+	files = glob.glob ('/home/root/host_home/projects/yerzhan/test_data/pcl_rs16Rec_20180822_0129/grid_files/*.csv')
+	print("read_data: len of files: " + str(len(files)))
 	for i in range (len(files)):
 		files[i] = files [i].replace ('.csv', '')
 		f = files[i]
@@ -74,6 +75,9 @@ def gen_model (input_shape=(6,10,10,10)):
 	cm.compile(optimizer=Adam (1e-4), loss='mse'
 		#, metrics = ['accuracy']
 	)
+	#print("the cm shape is:")
+	#print(cm.get_output_at(0).get_shape().as_list())
+
 	Z = X
 	model.add(Dense(1024))
 	X = Dense(1024)(X)
@@ -99,9 +103,9 @@ def gen_model (input_shape=(6,10,10,10)):
 	model.compile(optimizer=Adam (1e-4), loss='mse'
 		#, metrics = ['accuracy']
 	)
-	return model,cm
+	#return model,cm
 
-	X2 = Activation('relu', name='Box Act')(X2)
+	X2 = Activation('relu', name='Box_Act')(X2)
 	model = Model (inp, [X1, X2])
 	convModel = Model (inp, Z)
 	sgd = SGD(lr=2e-3, decay=1e-4, momentum=0.9, nesterov=True)
