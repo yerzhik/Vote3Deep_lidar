@@ -16,7 +16,7 @@ np.random.seed(420)
 
 def read_data ():
         data = []
-        files = glob.glob ('/home/yerzhan/temp/recdata_2018-08-22T10-25-53/recdata_20180822_012558_003375/pcl_rs16$
+        files = glob.glob ('/home/root/host_home/projects/yerzhan/test_data/pcl_rs16Rec_20180822_0129/grid_files/*.csv');
         for i in range (len(files)):
                 files[i] = files [i].replace ('.csv', '')
                 f = files[i]
